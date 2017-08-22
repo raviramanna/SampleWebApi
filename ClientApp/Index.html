@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <script src="scripts/angular.js"></script>
+    <link href="Content/bootstrap-lumen.css" rel="stylesheet" />
+    <link href="Content/country-select/jquery.countryselector.min.css" rel="stylesheet" />
+</head>
+<body>
+<div class="jumbotron">
+    <h1>iasset.com</h1>      
+    <p>.Net Developer Technical Test</p>
+</div>
+<div ng-app="WeatherApp" ng-controller="WeatherController" class="container">
+
+    <div class="form-group">
+        <h3> <span class="label label-default">Please Enter a country name</span></h3>
+        <input type="text" class="form-control" id="country" ng-model="country">
+        <h3> <span class="label label-default">Or Select From the Dropdown list</span></h3>
+        <select id="countrySelector" ng-model="countryNam" ng-change="changeCountry(countryNam)" class="form-control" value="CHN" data-code-mode="alpha3" data-show-flag="false" data-role="country-selector"></select>
+    </div>
+    <input ng-show="country" type="button" class="btn btn-primary" ng-click="getCities(country)" value="Get Cities - {{country}}"/>
+
+
+    <div class="btn-group" uib-dropdown is-open="status.isopen" ng-show="(country && showDropDown)">
+        <button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+            Cities Found <span class="badge">{{cities.length}}</span> <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+            <li role="menuitem" ng-model="cityName" ng-repeat="x in cities" ng-click="getWeatherDetails(x)"><a href="#">{{x}}</a></li>
+
+        </ul>
+    </div>
+
+    <div class="table-responsive" ng-show="showWeatherDetails">
+        <h2>Weather Details</h2>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Detail Name</th>
+                <th>Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Name</td>
+                <td>{{cityWeather.name}} , {{cityWeather.sys.country}}</td>
+            </tr>
+            <tr>
+                <td>Description</td>
+                <td>{{cityWeather.weather[0].main}} - {{cityWeather.weather[0].description}} <img src="{{weatherImage}}"/></td>
+            </tr>
+            <tr>
+                <td>Coords</td>
+                <td>latitude = {{cityWeather.coord.lat}}, longitude = {{cityWeather.coord.lon}}</td>
+            </tr>
+            <tr ng-show="cityWeather.main.temp">
+                <td>Temprature</td>
+                <td>{{cityWeather.main.temp-273.15 | number:2 }}<span>&#8451;</span></td>
+            </tr>
+            <tr ng-show="cityWeather.main.pressure">
+                <td>Pressure</td>
+                <td>{{cityWeather.main.pressure}} hPa</td>
+            </tr>
+            <tr ng-show="cityWeather.main.humidity">
+                <td>Humidity</td>
+                <td>{{cityWeather.main.humidity}} %</td>
+            </tr>
+            <tr ng-show="cityWeather.main.temp_min">
+                <td>Minimum Temprature</td>
+                <td>{{cityWeather.main.temp_min-273.15| number:2 }}<span>&#8451;</span></td>
+            </tr>
+            <tr ng-show="cityWeather.main.temp_max">
+                <td>Maximum Temprature</td>
+                <td>{{cityWeather.main.temp_max- 273.15| number:2 }}<span>&#8451;</span></td>
+            </tr>
+            <tr ng-show="cityWeather.dt">
+                <td>TimeRecorded</td>
+                <td>{{cityWeather.dt*1000 | date:'medium' }}</td>
+            </tr>
+            <tr ng-show="cityWeather.sys.sunrise">
+                <td>Sunrise Time</td>
+                <td>{{cityWeather.sys.sunrise*1000 | date:'medium'}}</td>
+            </tr>
+            <tr ng-show="cityWeather.sys.sunset">
+                <td>Sunset Time</td>
+                <td>{{cityWeather.sys.sunset *1000 | date:'medium'}}</td>
+            </tr>
+            <tr ng-show="cityWeather.visibility">
+                <td>Visibility</td>
+                <td>{{cityWeather.visibility}} meter</td>
+            </tr>
+            <tr ng-show="cityWeather.wind.speed">
+                <td>Wind Speed</td>
+                <td>{{cityWeather.wind.speed}} meter/sec</td>
+            </tr>
+            <tr ng-show="cityWeather.wind.deg">
+                <td>Wind Degree</td>
+                <td>{{cityWeather.wind.deg}} degrees </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script src="scripts/jquery-1.10.2.min.js"></script>
+<script src="Controller/CityListController.js"></script>
+<script src="scripts/bootstrap.js"></script>
+<script src="scripts/angular-ui/ui-bootstrap-tpls.js"></script>
+<script src="scripts/jquery.countryselector.min.js"></script>
+</body>
+</html>
